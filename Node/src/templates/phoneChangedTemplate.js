@@ -1,39 +1,82 @@
-export const phoneChangedTemplate = ({
-  firstName,
-  oldPhone,
-  newPhone,
-}) => {
+export const phoneChangedTemplate = (name, newPhone) => {
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e5e5e5; border-radius: 10px;">
+  <div style="
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    padding: 40px 0;
+  ">
+    <div style="
+      max-width: 600px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    ">
 
-      <h2 style="color: #2563eb; text-align: center;">
-        Phone Number Changed
-      </h2>
+      <!-- Header -->
+      <div style="
+        background: #0f172a;
+        padding: 20px;
+        text-align: center;
+        color: #ffffff;
+      ">
+        <h2 style="margin: 0; font-size: 22px;">📱 Security Alert</h2>
+      </div>
 
-      <p>Hello ${firstName || "User"},</p>
+      <!-- Body -->
+      <div style="padding: 30px; color: #333;">
+        <h3 style="margin-top: 0;">Hello ${name},</h3>
 
-      <p>
-        Your phone number was updated successfully.
-      </p>
+        <p style="font-size: 15px; line-height: 1.6;">
+          Your phone number has been successfully updated on your ISP account.
+        </p>
 
-      <p>
-        <strong>Old Number:</strong> ${oldPhone}
-      </p>
+        <!-- Highlight Box -->
+        <div style="
+          background: #fef3c7;
+          border-left: 5px solid #f59e0b;
+          padding: 12px 15px;
+          margin: 20px 0;
+          border-radius: 5px;
+          font-size: 14px;
+        ">
+          <strong>New Phone:</strong> ${newPhone}
+        </div>
 
-      <p>
-        <strong>New Number:</strong> ${newPhone}
-      </p>
+        <div style="
+          background: #fee2e2;
+          border-left: 5px solid #ef4444;
+          padding: 12px 15px;
+          margin: 20px 0;
+          border-radius: 5px;
+          font-size: 13px;
+        ">
+          If this was NOT you, contact support immediately to secure your account.
+        </div>
 
-      <p style="color: red;">
-        If you did NOT make this change,
-        contact support immediately.
-      </p>
+        <p style="font-size: 14px; color: #555;">
+          Keeping your contact information updated helps ensure uninterrupted ISP service and payment notifications.
+        </p>
 
-      <div style="margin-top: 30px;">
-        Regards,<br/>
-        Security Team
+        <p style="font-size: 14px; color: #555;">
+          Regards,<br/>
+          <strong>X-25 ISP System</strong>
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="
+        background: #f1f5f9;
+        text-align: center;
+        padding: 15px;
+        font-size: 12px;
+        color: #777;
+      ">
+        © ${new Date().getFullYear()} X-25 ISP. All rights reserved.
       </div>
 
     </div>
+  </div>
   `;
 };

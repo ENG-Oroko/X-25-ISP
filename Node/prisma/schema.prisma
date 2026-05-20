@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+migrations: {
+  path: "prisma/migrations",
+  seed: "tsx prisma/seed.ts", // 👈 points to prisma/seed.ts
+},
+
+enum Role {
+  ADMIN
+  CLIENT
+  TECHNICIAN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING
+}
+
+enum PlanStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum BillingCycle {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  PENDING
+}
+
+enum PaymentMethod {
+  AIRTEL
+  MPESA
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id          Int         @id @default(autoincrement())
+  fullName    String
+  email       String      @unique
+  phone       String      @unique
+  password    String
+
+  role        Role        @default(CLIENT)
+  status      UserStatus  @default(PENDING)
+
+  mustChangePassword     Boolean    @default(false)
+
+  resetPasswordOtp       String?
+  resetPasswordOtpExpiry DateTime?
+
+  isVerified  Boolean     @default(false)
+  avatar      String?
+
+  subscriptions Subscription[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model InternetPlan {
+  id           Int           @id @default(autoincrement())
+
+  name         String
+  description  String?
+
+  speed        String
+  price        Float
+
+  billingCycle BillingCycle  @default(MONTHLY)
+
+  status       PlanStatus    @default(ACTIVE)
+
+  subscriptions Subscription[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Subscription {
+  id          Int                 @id @default(autoincrement())
+
+  clientId    Int
+  planId      Int
+
+  startDate   DateTime            @default(now())
+  endDate     DateTime
+
+  status      SubscriptionStatus  @default(PENDING)
+
+  payments    Payment[]
+
+  client      User                @relation(fields: [clientId], references: [id])
+  plan        InternetPlan        @relation(fields: [planId], references: [id])
+
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([clientId])
+  @@index([planId])
+}
+
+model Payment {
+  id              Int             @id @default(autoincrement())
+
+  subscriptionId  Int
+
+  amount          Float
+
+  method          PaymentMethod
+  status          PaymentStatus   @default(COMPLETED)
+
+  transactionCode String?
+
+  paidAt          DateTime        @default(now())
+
+  subscription    Subscription    @relation(fields: [subscriptionId], references: [id])
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([subscriptionId])
+}

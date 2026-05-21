@@ -2,10 +2,10 @@ import { prisma } from "../../utils/prisma.js";
 
 export const getUser = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const id = req.params.id || req.user.id;
 
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: Number(id) },
       select: {
         id: true,
         fullName: true,
@@ -21,8 +21,8 @@ export const getUser = async (req, res) => {
     if (!user)
       return res.status(404).json({ message: "User not found" });
 
-    return res.json({ user });
-  } catch (err) {
-    return res.status(500).json({ message: "Server error" });
+    res.json({ user });
+  } catch {
+    res.status(500).json({ message: "Server error" });
   }
 };

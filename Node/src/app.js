@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import subscriptionsRoutes from "./routes/subscription.js";
+import plansRoutes from "./routes/subscriptionPlan.js";
 
 
 const app = express();
@@ -30,6 +32,8 @@ app.use(morgan("dev"));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/subscriptions", subscriptionsRoutes);
+app.use("/api/plans", plansRoutes);
 
 app.get("/", (req, res) => {
   res.json({
